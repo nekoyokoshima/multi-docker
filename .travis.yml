@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t nekoyokoshima/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true nekoyokshima/react-test npm test
+
+after_success:
+- docker build -t nekoyokoshimna/multi-client ./client
+- docker build -t nekoyokoshimna/multi-nginx ./nginx
+- docker build -t nekoyokoshimna/multi-server ./server
+- docker build -t nekoyokoshimna/multi-worker ./worker
+# Log in to the docker CLI
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+# Take image an dpush to docker hub
+- docker push nekoyokoshimna/multi-client
+- docker push nekoyokoshimna/multi-nginx
+- docker push nekoyokoshimna/multi-server
+- docker push nekoyokoshimna/multi-worker
