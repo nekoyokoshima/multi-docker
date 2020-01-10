@@ -6,7 +6,7 @@ before_install:
   - docker build -t nekoyokoshima/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true nekoyokshima/react-test npm test
+  - docker run -e CI=true nekoyokoshima/react-test npm test
 
 after_success:
 - docker build -t nekoyokoshimna/multi-client ./client
